@@ -41,7 +41,7 @@ let currentFilterCategory = 'Semua';
 let previousPage = 'discoverPage';
 let currentProductIdForDetail = null; // --- BARU: Untuk tombol bagikan ---
 
-const sellerWhatsAppConfirmationNumber = "089654291565"; 
+const sellerWhatsAppConfirmationNumber = "6289654291565"; 
 const qrisImageUrl = "https://a.top4top.io/p_3437ncyws0.png"; 
 const bcaAccountNameConst = "JAJANG NURJAMAN";
 
