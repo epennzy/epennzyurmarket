@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epennzy Market - Dark Mode</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script> <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body class="max-w-md mx-auto shadow-lg">
+
+    <div id="app" class="relative min-h-screen pb-20">
+
+        <div id="discoverPage" class="page p-4">
+            <header class="flex justify-between items-center mb-4">
+                <a href="#" onclick="event.preventDefault(); navigateTo('discoverPage');" title="Beranda Epennzy Market">
+                    <img src="https://i.top4top.io/p_3437qi8j20.png" alt="Epennzy Market Logo" class="h-12">
+                </a>
+                <button id="notificationButton" aria-label="Notifikasi" class="text-secondary-dark hover:text-main-dark p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                </button>
+            </header>
+            <div id="searchContainer" class="relative mb-4 hidden">
+                <input type="text" id="searchInput" placeholder="Cari produk digital..." class="w-full p-3 pl-10 rounded-lg input-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                <button id="filterButton" aria-label="Filter Produk" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-dark"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8v-2m0 2a2 2 0 100 4m0-4a2 2 0 110 4m0 0v-2m0 2a2 2 0 100 4m0-4a2 2 0 110 4m6-14v-2m0 2a2 2 0 100 4m0-4a2 2 0 110 4m0 0V4" /></svg></button>
+            </div>
+            <div class="mb-4"><h3 class="text-lg font-semibold text-main-dark mb-2">Kategori</h3><div id="categoryContainer" class="flex space-x-2 overflow-x-auto category-scroll pb-2"></div></div>
+            <div id="productGrid" class="grid grid-cols-2 gap-4"></div>
+            <div id="testimonialsSection" class="mb-6 mt-8 border-t border-gray-700 pt-6">
+                <h3 class="text-lg font-semibold text-main-dark mb-3 text-center">Ulasan Pelanggan (241)</h3>
+                <div id="testimonialsContainer" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <div id="savedItemsPage" class="page p-4"><header class="flex items-center mb-4"><button onclick="navigateTo('discoverPage')" class="mr-3 text-secondary-dark"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button><h1 class="text-2xl font-bold header-dark">Saved Items</h1></header><div id="savedItemsContainer" class="space-y-4"><p class="text-secondary-dark text-center">Belum ada item yang disimpan.</p></div></div>
+        
+        <div id="cartPage" class="page p-4"><header class="flex items-center mb-4"><button onclick="navigateTo('discoverPage')" class="mr-3 text-secondary-dark"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button><h1 class="text-2xl font-bold header-dark">My Cart</h1></header><div id="cartItemsContainer" class="space-y-3 mb-6"><p class="text-secondary-dark text-center">Keranjang belanja Anda kosong.</p></div><div id="cartSummary" class="border-t border-gray-700 pt-4"><div class="flex justify-between items-center mb-2 text-main-dark"><span>Sub-total</span><span id="cartSubtotal">Rp0</span></div><div class="flex justify-between items-center mb-2 text-main-dark"><span>Biaya Pengiriman</span><span>Rp0</span></div><div class="flex justify-between items-center mb-4 text-gray-100 font-bold text-lg"><span>Total</span><span id="cartTotal">Rp0</span></div><button onclick="navigateTo('checkoutPage')" id="goToCheckoutButton" class="w-full button-accent-dark py-3 rounded-lg font-semibold transition disabled:opacity-50">Lanjutkan ke Pembayaran</button></div></div>
+        
+        <div id="productDetailPage" class="page p-4">
+            <header class="flex items-center mb-4"><button onclick="goBack()" class="mr-3 text-secondary-dark"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button><h1 id="productDetailName" class="text-2xl font-bold header-dark">Nama Produk</h1></header>
+            <img id="productDetailImage" src="https://placehold.co/600x400/374151/9CA3AF?text=Produk" alt="Product Image" class="w-full h-64 object-cover rounded-lg mb-4">
+            <div class="flex justify-between items-center mb-2">
+                <p id="productDetailPrice" class="text-2xl font-bold text-accent-dark">Rp0</p>
+                <button id="productDetailSaveButton" class="text-gray-500 hover:text-red-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg></button>
+            </div>
+            <p id="productDetailDuration" class="text-sm text-secondary-dark mb-4"></p>
+            <h3 class="text-lg font-semibold text-main-dark mb-2">Deskripsi:</h3>
+            <ul id="productDetailDescription" class="list-disc list-inside text-secondary-dark space-y-1 mb-6"></ul>
+            <div class="space-y-3">
+                <button id="productDetailAddToCartButton" class="w-full button-accent-dark py-3 rounded-lg font-semibold transition">Tambah ke Keranjang</button>
+                <button id="productDetailShareButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                    </svg>
+                    <span>Bagikan Produk</span>
+                </button>
+                <button id="getUsageIdeasButton" class="w-full gemini-button-dark py-3 rounded-lg font-semibold transition">✨ Dapatkan Ide Penggunaan</button>
+            </div>
+        </div>
+
+        <div id="checkoutPage" class="page p-4">
+            <header class="flex items-center mb-6">
+                <button onclick="navigateTo('cartPage')" class="mr-3 text-secondary-dark"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
+                <h1 class="text-2xl font-bold header-dark">Instruksi Pembayaran</h1>
+            </header>
+            <div id="buyerInfoForm" class="space-y-4 mb-6">
+                <div><label for="buyerName" class="block text-sm font-medium text-main-dark mb-1">Nama Lengkap Anda</label><input type="text" id="buyerName" name="buyerName" required class="w-full p-2 rounded-md input-dark" placeholder="Nama untuk konfirmasi"></div>
+                <div><label for="buyerWhatsApp" class="block text-sm font-medium text-main-dark mb-1">Nomor WhatsApp Anda</label><input type="tel" id="buyerWhatsApp" name="buyerWhatsApp" required placeholder="Nomor WA untuk dihubungi" class="w-full p-2 rounded-md input-dark"></div>
+            </div>
+            <h2 class="text-lg font-semibold mb-3 text-main-dark">Pilih Metode Pembayaran Manual:</h2>
+            <div class="payment-option">
+                <h3>GoPay</h3>
+                <p><span>Nomor: <strong>089654291565</strong></span><button onclick="copyToClipboard('089654291565', 'Nomor GoPay')" class="copy-button" aria-label="Salin Nomor GoPay"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v1.006a.75.75 0 01-.75.75H2.25a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75H8.5a.75.75 0 01.75.75v1.006a3 3 0 01-1.5 2.684L7.5 12.375l-.75-.375a.75.75 0 00-.91-.192 1.5 1.5 0 00-1.077 1.705l.344 1.032c.319.957-.457 1.956-1.464 1.956H2.25a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75H8.5a.75.75 0 01.75.75V8.56a3 3 0 01-1.5 2.684L7.5 12.375l-.75-.375a.75.75 0 00-.91-.192 1.5 1.5 0 00-1.077 1.705l.344 1.032c.319.957-.457 1.956-1.464 1.956H2.25zM12 21a3 3 0 100-6 3 3 0 000 6zm9-9a3 3 0 100-6 3 3 0 000 6z" /></svg></button></p>
+                <p>Atas Nama: <strong>Jajang Nurjaman</strong></p>
+            </div>
+            <div class="payment-option">
+                <h3>Dana</h3>
+                <p><span>Nomor: <strong>089654291565</strong></span><button onclick="copyToClipboard('089654291565', 'Nomor Dana')" class="copy-button" aria-label="Salin Nomor Dana"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v1.006a.75.75 0 01-.75.75H2.25a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75H8.5a.75.75 0 01.75.75v1.006a3 3 0 01-1.5 2.684L7.5 12.375l-.75-.375a.75.75 0 00-.91-.192 1.5 1.5 0 00-1.077 1.705l.344 1.032c.319.957-.457 1.956-1.464 1.956H2.25a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75H8.5a.75.75 0 01.75.75V8.56a3 3 0 01-1.5 2.684L7.5 12.375l-.75-.375a.75.75 0 00-.91-.192 1.5 1.5 0 00-1.077 1.705l.344 1.032c.319.957-.457 1.956-1.464 1.956H2.25zM12 21a3 3 0 100-6 3 3 0 000 6zm9-9a3 3 0 100-6 3 3 0 000 6z" /></svg></button></p>
+                <p>Atas Nama: <strong>Idah Karsidah</strong></p>
+            </div>
+            <div class="payment-option">
+                <h3>Bank BCA</h3>
+                <p><span>No. Rekening: <strong>7753160550</strong></span><button onclick="copyToClipboard('7753160550', 'Nomor Rekening BCA')" class="copy-button" aria-label="Salin Nomor Rekening BCA"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v1.006a.75.75 0 01-.75.75H2.25a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75H8.5a.75.75 0 01.75.75v1.006a3 3 0 01-1.5 2.684L7.5 12.375l-.75-.375a.75.75 0 00-.91-.192 1.5 1.5 0 00-1.077 1.705l.344 1.032c.319.957-.457 1.956-1.464 1.956H2.25a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75H8.5a.75.75 0 01.75.75V8.56a3 3 0 01-1.5 2.684L7.5 12.375l-.75-.375a.75.75 0 00-.91-.192 1.5 1.5 0 00-1.077 1.705l.344 1.032c.319.957-.457 1.956-1.464 1.956H2.25zM12 21a3 3 0 100-6 3 3 0 000 6zm9-9a3 3 0 100-6 3 3 0 000 6z" /></svg></button></p>
+                <p>Atas Nama: <strong id="bcaAccountNameText">JAJANG NURJAMAN</strong></p>
+            </div>
+            <button onclick="navigateTo('qrisPage')" class="w-full button-accent-dark py-3 rounded-lg font-semibold transition mt-2 mb-6">Bayar dengan QRIS</button>
+            <div class="mt-6 p-4 bg-yellow-900 bg-opacity-30 border border-yellow-700 rounded-lg text-yellow-200">
+                <h3 class="font-semibold text-md mb-2">PENTING: Instruksi Konfirmasi</h3>
+                <ol class="list-decimal list-inside text-sm space-y-1">
+                    <li>Lakukan pembayaran ke salah satu rekening/e-wallet di atas sejumlah <strong id="checkoutTotalAmountDisplay" class="text-yellow-100">Rp0</strong>.</li>
+                    <li>Ambil screenshot (bukti transfer) pembayaran Anda.</li>
+                    <li>Klik tombol di bawah untuk konfirmasi pesanan Anda melalui WhatsApp.</li>
+                    <li>Kirimkan bukti transfer beserta nama dan detail pesanan Anda kepada kami.</li>
+                </ol>
+            </div>
+            <button id="confirmViaWhatsAppButton" class="w-full button-accent-dark py-3 rounded-lg font-semibold transition mt-6">Konfirmasi Pembayaran via WhatsApp</button>
+        </div>
+
+        <div id="qrisPage" class="page p-4"><header class="flex items-center mb-6"><button onclick="navigateTo('checkoutPage')" class="mr-3 text-secondary-dark"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button><h1 class="text-2xl font-bold header-dark">Pembayaran QRIS</h1></header><div class="text-center"><img id="qrisImage" src="https://placehold.co/350x350/FFFFFF/111827?text=QRIS+ANDA" alt="QRIS Epennzy Market" class="mx-auto mb-4 border-4 border-gray-700 rounded-lg"><p class="text-main-dark mb-2">Silakan scan QRIS di atas.</p><p class="text-secondary-dark mb-1">Total Pembayaran: <strong id="qrisTotalAmountDisplay" class="text-main-dark">Rp0</strong></p><p class="text-yellow-300 text-sm mb-4">PENTING: Setelah bayar, screenshot bukti pembayaran.</p><button id="qrisPaidButton" class="w-full button-accent-dark py-3 rounded-lg font-semibold transition">Saya Sudah Bayar & Konfirmasi</button></div></div>
+        
+        <div id="orderConfirmationPage" class="page p-4"><header class="flex items-center mb-6"><button onclick="navigateTo('checkoutPage')" class="mr-3 text-secondary-dark"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button><h1 id="orderConfirmationTitle" class="text-2xl font-bold header-dark mb-2">Konfirmasi Pesanan Anda</h1></header><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" id="orderConfirmationIcon" class="h-16 w-16 text-emerald-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><p id="orderConfirmationMessage" class="text-secondary-dark mb-4">Segera hubungi kami via WhatsApp.</p><div id="orderInfo" class="text-sm text-secondary-dark mb-4 p-3 bg-gray-800 rounded-md text-left card-dark"></div><div id="finalWhatsAppButtonContainer" class="my-6"></div><button onclick="navigateTo('discoverPage')" class="button-accent-dark py-2 px-6 rounded-lg font-semibold transition">Kembali ke Beranda</button></div></div>
+
+        <div id="orderHistoryPage" class="page p-4">
+            <header class="flex items-center mb-6">
+                <button onclick="navigateTo('discoverPage')" class="mr-3 text-secondary-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <h1 class="text-2xl font-bold header-dark">Riwayat Pesanan Saya</h1>
+            </header>
+            <div id="orderHistoryContainer" class="space-y-4">
+                <p class="text-secondary-dark text-center">Belum ada riwayat pesanan.</p>
+            </div>
+        </div>
+
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto flex justify-around items-center h-16 shadow-top z-50 bottom-nav-dark">
+            <button onclick="navigateTo('discoverPage')" data-page="discoverPage" class="bottom-nav-item flex flex-col items-center justify-center text-xs text-secondary-dark hover:text-emerald-400 pt-1 w-1/5"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 bottom-nav-icon-dark" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>Home</button>
+            <button onclick="handleSearchIconClick()" data-page="searchTrigger" class="bottom-nav-item flex flex-col items-center justify-center text-xs text-secondary-dark hover:text-emerald-400 pt-1 w-1/5"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 bottom-nav-icon-dark" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>Search</button>
+            <button onclick="navigateTo('orderHistoryPage')" data-page="orderHistoryPage" class="bottom-nav-item flex flex-col items-center justify-center text-xs text-secondary-dark hover:text-emerald-400 pt-1 w-1/5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 bottom-nav-icon-dark" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11a1 1 0 11-2 0v-3a1 1 0 01.293-.707l2-2a1 1 0 011.414 1.414L11 8.586V11z" clip-rule="evenodd" />
+                </svg>Riwayat
+            </button>
+            <button onclick="navigateTo('savedItemsPage')" data-page="savedItemsPage" class="bottom-nav-item flex flex-col items-center justify-center text-xs text-secondary-dark hover:text-emerald-400 pt-1 w-1/5"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 bottom-nav-icon-dark" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>Saved</button>
+            <button onclick="navigateTo('cartPage')" data-page="cartPage" class="relative bottom-nav-item flex flex-col items-center justify-center text-xs text-secondary-dark hover:text-emerald-400 pt-1 w-1/5"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 bottom-nav-icon-dark" viewBox="0 0 20 20" fill="currentColor"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /></svg>Cart<span id="cartItemCount" class="absolute top-0 right-2.5 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center hidden">0</span></button>
+        </nav>
+    </div>
+
+    <div id="customModal" class="modal-container">
+        <div class="modal-content-dark modal-content p-6 rounded-lg shadow-xl">
+            <h3 id="modalTitle" class="modal-header-dark modal-header text-xl mb-4">Informasi</h3>
+            <div id="modalMessageText" class="modal-body-dark modal-body mb-6"></div>
+            <div class="flex justify-end">
+                <button id="modalClose" class="modal-close-button-dark py-2 px-4 rounded-md font-semibold">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="filterModal" class="modal-container">
+        <div class="modal-content-dark modal-content p-6 rounded-lg shadow-xl">
+            <h3 id="filterModalTitle" class="modal-header-dark modal-header text-xl mb-4">Filter Produk</h3>
+            <div id="filterModalBody" class="modal-body-dark modal-body mb-6">
+                <p class="text-sm mb-3">Opsi filter lanjutan akan tersedia di sini. Untuk saat ini, Anda dapat menggunakan pencarian berdasarkan nama atau kategori.</p>
+                <div class="mb-4">
+                    <label for="filterSortBy" class="block text-sm font-medium text-main-dark mb-1">Urutkan berdasarkan (Contoh):</label>
+                    <select id="filterSortBy" disabled class="w-full p-2 rounded-md input-dark bg-gray-700 opacity-50 cursor-not-allowed">
+                        <option value="default">Default</option>
+                        <option value="price_asc">Harga Terendah</option>
+                        <option value="price_desc">Harga Tertinggi</option>
+                    </select>
+                </div>
+                 <p class="text-xs text-gray-500">Fungsionalitas filter ini sedang dalam pengembangan.</p>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="filterModalApply" class="button-accent-dark py-2 px-4 rounded-md font-semibold opacity-50 cursor-not-allowed" disabled>Terapkan</button>
+                <button id="filterModalClose" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md font-semibold">Tutup</button>
+            </div>
+        </div>
+    </div>
+    
+    <button id="scrollToTopBtn" title="Kembali ke atas" class="hidden fixed bottom-20 right-5 bg-emerald-500 hover:bg-emerald-600 text-white p-3 rounded-full shadow-lg transition-opacity duration-300 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
